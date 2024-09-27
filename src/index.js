@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {useState, useEffect} from "react";
+import $ from "jquery";
 import './index.css';
+import {marked} from "marked";
 
 const quotes = [
   { text: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" },
@@ -11,6 +13,8 @@ const quotes = [
   { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" }
 
 ];
+
+
 
 const App = () =>{
 
@@ -27,8 +31,10 @@ const App = () =>{
   }
 
   useEffect(() => {
+
     loadQuotes();
   }, []);
+
 
   return(
     <div className='App'>
@@ -42,9 +48,69 @@ const App = () =>{
   );
 }
 
+//========================================= FCCMarkdownApp ===========================================
+const initialMarkdown = `# Bem-vindo ao Markdown Previewer!
+
+## Este é um sub-título (H2)
+### E este é um sub-sub-título (H3)
+
+Aqui está um link para [Google](https://www.google.com)
+
+\`Código inline\` e um bloco de código:
+
+\`\`\`
+function sayHello() {
+  console.log("Hello, world!");
+}
+\`\`\`
+
+**Texto em negrito**
+
+> Citação em bloco.
+
+- Item de lista 1
+- Item de lista 2
+- Item de lista 3
+
+![Logo do React](https://reactjs.org/logo-og.png)
+`;
+
+const MarkdownApp = () =>{
+
+  const [markdown, setMarkdown] = useState(initialMarkdown);
+
+  const handleChange = (e) => {
+      setMarkdown(e.target.value);
+  
+  }
+
+  useEffect(() => {
+
+  }, []);
+
+
+  return(
+    <div className='markdown'>
+       <textarea id='editor'
+                  value={markdown}
+                  onChange={handleChange}
+                  className='textarea'
+       >
+
+       </textarea>
+        <div id='preview' 
+             className='preview'
+             dangerouslySetInnerHTML={{__html: marked(markdown)}}
+        >
+        </div>
+      </div>
+
+  );
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <MarkdownApp />
   </React.StrictMode>
 );
